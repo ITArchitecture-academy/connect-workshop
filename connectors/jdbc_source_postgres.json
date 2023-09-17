@@ -1,0 +1,13 @@
+{
+  "name": "source-connector",
+  "config": {
+    "connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector",
+    "connection.url": "jdbc:postgresql:user:password@localhost:5432/user",
+    "table.whitelist": "assets_movements",
+    "mode": "incrementing",
+    "incrementing.column.name": "id",
+    "table.types": "TABLE",
+    "topic.prefix": "card_",
+    "batch.size": 1000
+  }
+}
