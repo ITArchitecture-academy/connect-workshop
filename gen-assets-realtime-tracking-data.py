@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import random
+import sys
 from datetime import datetime
 import time
 
@@ -54,4 +55,5 @@ num_assets = 50
 while True:
     asset_num = random.randint(1, num_assets)
     print(json.dumps(gen_data(asset_num)))
+    sys.stdout.flush()
     time.sleep(1)
