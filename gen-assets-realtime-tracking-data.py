@@ -27,8 +27,7 @@ asset_statuses = ["active", "inactive", "broken", "lost", "stolen"]
 
 last_state = {}
 
-def gen_data(asset_num):
-    asset_id = "asset_" + str(asset_num)
+def gen_data(asset_id):
     if asset_id not in last_state:
         asset_type = random.choice(asset_types)
         asset_status = random.choice(asset_statuses)
@@ -54,6 +53,8 @@ def gen_data(asset_num):
 num_assets = 50
 while True:
     asset_num = random.randint(1, num_assets)
-    print(json.dumps(gen_data(asset_num)))
+    asset_id = "asset_" + str(asset_num)
+    json_data = json.dumps(gen_data(asset_id))
+    print(asset_id + ":" + json_data)
     sys.stdout.flush()
     time.sleep(1)
