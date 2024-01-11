@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
+import json
 import random
 import sys
-from datetime import datetime
 import time
-
-import json
+from datetime import datetime
 
 """"
 Format of the data in the Kafka topic `assets_realtime_tracking`:
@@ -19,23 +18,19 @@ schema = {
         "asset_id": {"type": "string"},
         "asset_type": {"type": "string"},
         "asset_status": {"type": "string"},
-        "asset_position": {
-            "type": "object",
-            "properties": {
-                "lat": {"type": "number"},
-                "lon": {"type": "number"}
-            },
-            "required": ["lat", "lon"]
-        },
+        "asset_position_lat": {"type": "number"},
+        "asset_position_lng": {"type": "number"},
         "timestamp": {"type": "string"}
     },
     "required": ["asset_id", "asset_type", "asset_status", "asset_position", "timestamp"]
 }
 
-asset_types = ["laptop", "smartphone", "tablet", "smartwatch", "smartglasses", "drone", "robot", "sensor", "camera", "server"]
+asset_types = ["laptop", "smartphone", "tablet", "smartwatch", "smartglasses", "drone", "robot", "sensor", "camera",
+               "server"]
 asset_statuses = ["active", "inactive", "broken", "lost", "stolen"]
 
 last_state = {}
+
 
 def gen_data(asset_id):
     if asset_id not in last_state:
@@ -48,10 +43,8 @@ def gen_data(asset_id):
             "asset_id": asset_id,
             "asset_type": asset_type,
             "asset_status": asset_status,
-            "asset_position": {
-                "lat": asset_position_lat,
-                "lon": asset_position_lon
-            },
+            "asset_position_lat": asset_position_lat,
+            "asset_position_lng": asset_position_lon,
             "timestamp": timestamp
         }
     else:
@@ -59,6 +52,7 @@ def gen_data(asset_id):
         last_state[asset_id]["asset_position"]["lon"] += random.uniform(-0.1, 0.1)
         last_state[asset_id]["timestamp"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     return last_state[asset_id]
+
 
 num_assets = 50
 while True:
