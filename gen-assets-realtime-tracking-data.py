@@ -11,18 +11,35 @@ Key: asset_id
 Value: JSON Object with the Schema and the payload as follows:
 """
 
-# JSON Schema
+# Schema
 schema = {
-    "type": "object",
-    "properties": {
-        "asset_id": {"type": "string"},
-        "asset_type": {"type": "string"},
-        "asset_status": {"type": "string"},
-        "asset_position_lat": {"type": "number"},
-        "asset_position_lng": {"type": "number"},
-        "timestamp": {"type": "string"}
-    },
-    "required": ["asset_id", "asset_type", "asset_status", "asset_position", "timestamp"]
+    "type": "struct",
+    "fields": [
+        {
+            "field": "asset_id",
+            "type": "string"
+        },
+        {
+            "field": "asset_type",
+            "type": "string"
+        },
+        {
+            "field": "asset_status",
+            "type": "string"
+        },
+        {
+            "field": "asset_position_lat",
+            "type": "float"
+        },
+        {
+            "field": "asset_position_lng",
+            "type": "float"
+        },
+        {
+            "field": "timestamp",
+            "type": "string"
+        }
+    ]
 }
 
 asset_types = ["laptop", "smartphone", "tablet", "smartwatch", "smartglasses", "drone", "robot", "sensor", "camera",
