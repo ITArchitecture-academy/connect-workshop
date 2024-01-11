@@ -17,6 +17,14 @@ INSERT_OUTBOX_SQL = '''
     VALUES (%s, %s, %s, %s::json, %s);
 '''
 
+conn = psycopg2.connect(
+    host="localhost",
+    port=5432,
+    database="maintenance",
+    user="user",
+    password="password"
+)
+cursor = conn.cursor()
 
 def insert_data():
     actions = ["Oil change", "Blade inspection", "Gearbox replacement"]
@@ -27,35 +35,25 @@ def insert_data():
     next_maintenance_date = datetime.now() + timedelta(days=random.randint(30, 365))
 
     try:
-        conn = psycopg2.connect(
-            host="localhost",
-            port=5432,
-            database="maintenance",
-            user="user",
-            password="password"
-        )
-        cur = conn.cursor()
-        cur.execute(INSERT_MAINTENANCE_SQL,
+        cursor.execute(INSERT_MAINTENANCE_SQL,
                     (turbine_id, actions_performed, maintenance_costs, remarks))
 
-        maintenance_id = cur.fetchone()[0]
+        payload = {
+            "turbineId": turbine_id,
+            "action": actions_performed,
+            "nextMaintenance": next_maintenance_date.strftime('%Y-%m-%d %H:%M:%S')
+        }
+        payload_json = json.dumps(payload)
 
-        payload = f'''{{
-            "turbineId": {turbine_id},
-            "action": "{actions_performed}",
-            "nextMaintenance": "{next_maintenance_date.strftime('%Y-%m-%d %H:%M:%S')}"
-        }}'''
         payload_id = uuid.uuid4()
-        cur.execute(INSERT_OUTBOX_SQL,
-                    ("WindTurbine", str(turbine_id), "MaintenancePerformed", payload, str(payload_id)))
+        cursor.execute(INSERT_OUTBOX_SQL,
+                    ("WindTurbine", str(turbine_id), "MaintenancePerformed", payload_json, str(payload_id)))
 
         conn.commit()
         print(f"Inserted maintenance log and outbox event for turbine {turbine_id}.")
-        cur.close()
-        conn.close()
 
     except (Exception, psycopg2.DatabaseError) as error:
-        print(error)
+        print("Error: ", error)
 
 
 if __name__ == "__main__":
