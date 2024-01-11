@@ -32,7 +32,7 @@ schema = {
             "type": "float"
         },
         {
-            "field": "asset_position_lng",
+            "field": "asset_position_lon",
             "type": "float"
         },
         {
@@ -61,7 +61,7 @@ def gen_data(asset_id):
             "asset_type": asset_type,
             "asset_status": asset_status,
             "asset_position_lat": asset_position_lat,
-            "asset_position_lng": asset_position_lon,
+            "asset_position_lon": asset_position_lon,
             "timestamp": timestamp
         }
     else:
