@@ -3,7 +3,7 @@
 echo "Creating database and user \`user\`"
 sudo -u postgres psql << EOF
 CREATE DATABASE "user";
-CREATE ROLE "user" REPLICATION LOGIN PASSWORD 'password';
+CREATE ROLE "user" LOGIN PASSWORD 'password';
 ALTER DATABASE "user" OWNER TO "user";
 EOF
 
