@@ -9,18 +9,28 @@ import json
 """"
 Format of the data in the Kafka topic `assets_realtime_tracking`:
 Key: asset_id
-Value: JSON object with the following structure:
-    {
-        "asset_id": "string",
-        "asset_type": "string",
-        "asset_status": "string",
-        "asset_position": {
-            "lat": "float",
-            "lon": "float"
-        },
-        "timestamp": "string"
-    }
+Value: JSON Object with the Schema and the payload as follows:
 """
+
+# JSON Schema
+schema = {
+    "type": "object",
+    "properties": {
+        "asset_id": {"type": "string"},
+        "asset_type": {"type": "string"},
+        "asset_status": {"type": "string"},
+        "asset_position": {
+            "type": "object",
+            "properties": {
+                "lat": {"type": "number"},
+                "lon": {"type": "number"}
+            },
+            "required": ["lat", "lon"]
+        },
+        "timestamp": {"type": "string"}
+    },
+    "required": ["asset_id", "asset_type", "asset_status", "asset_position", "timestamp"]
+}
 
 asset_types = ["laptop", "smartphone", "tablet", "smartwatch", "smartglasses", "drone", "robot", "sensor", "camera", "server"]
 asset_statuses = ["active", "inactive", "broken", "lost", "stolen"]
@@ -54,7 +64,8 @@ num_assets = 50
 while True:
     asset_num = random.randint(1, num_assets)
     asset_id = "asset_" + str(asset_num)
-    json_data = json.dumps(gen_data(asset_id))
+    payload = gen_data(asset_id)
+    json_data = json.dumps({"schema": schema, "payload": payload})
     print(asset_id + ":" + json_data)
     sys.stdout.flush()
     time.sleep(1)
