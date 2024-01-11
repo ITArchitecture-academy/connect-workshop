@@ -65,8 +65,8 @@ def gen_data(asset_id):
             "timestamp": timestamp
         }
     else:
-        last_state[asset_id]["asset_position"]["lat"] += random.uniform(-0.1, 0.1)
-        last_state[asset_id]["asset_position"]["lon"] += random.uniform(-0.1, 0.1)
+        last_state[asset_id]["asset_position_lat"] += random.uniform(-0.1, 0.1)
+        last_state[asset_id]["asset_position_lon"] += random.uniform(-0.1, 0.1)
         last_state[asset_id]["timestamp"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     return last_state[asset_id]
 
